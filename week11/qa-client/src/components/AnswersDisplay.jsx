@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 
 
 import UserContext from "../contexts/UserContext";
-import {addAnswer, deleteAnswer, getAnswersByQuestionId, updateAnswer, upVoteAnswer} from '../api/api'
+import { addAnswer, deleteAnswer, getAnswersByQuestionId, updateAnswer, upVoteAnswer } from '../api/api'
 
 function AnswersTable(props) {
 
@@ -149,7 +149,7 @@ function AnswersDisplay(props) {
         // setWaiting(true)
 
         // optimistically modify the state by assuming the vote went well
-        setAnswers(oldanswers => oldanswers.map(a => (a.id == ans.id ? { ...a, score: a.score + 1, fake:true } : a)))
+        setAnswers(oldanswers => oldanswers.map(a => (a.id == ans.id ? { ...a, score: a.score + 1, fake: true } : a)))
 
         // call API for upvoting
         await upVoteAnswer(ans.id)
@@ -160,31 +160,27 @@ function AnswersDisplay(props) {
     }
 
     // Delete an answer
-    const deleteAns = async(ans) => {
+    const deleteAns = async (ans) => {
         await deleteAnswer(ans.id)
         const answers = await getAnswersByQuestionId(questionId)
         setAnswers(answers)
     }
 
     // Add an answer
-    const addAnswerHandler = async(text) => {
+    const addAnswerHandler = async (text) => {
         await addAnswer(questionId, text)
         const answers = await getAnswersByQuestionId(questionId)
         setAnswers(answers)
     }
 
     // Update an answer
-    const updateAnswerHandler = async(id, text) => {
+    const updateAnswerHandler = async (id, text) => {
         await updateAnswer(id, text)
         const answers = await getAnswersByQuestionId(questionId)
         setAnswers(answers)
     }
 
-
-    const my_answers = answers // all of them
-    // const my_answers = props.answers.filter( ans => ans.questionId == questionId)
-
-    if(waiting)
+    if (waiting)
         return <h2>Please wait...</h2>
     return (
         <>
@@ -192,7 +188,7 @@ function AnswersDisplay(props) {
                 <Col as='h2' className='text-start'>Answers for question {questionId}:</Col>
             </Row>
             <Row>
-                <AnswersTable mode={mode} setMode={setMode} answers={my_answers} upVote={upVote} delAnswer={deleteAns} addAnswer={addAnswerHandler} updateAnswer={updateAnswerHandler}></AnswersTable>
+                <AnswersTable mode={mode} setMode={setMode} answers={answers} upVote={upVote} delAnswer={deleteAns} addAnswer={addAnswerHandler} updateAnswer={updateAnswerHandler}></AnswersTable>
             </Row>
         </>
     )

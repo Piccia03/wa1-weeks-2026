@@ -6,33 +6,80 @@ GET http://localhost:3001/api/questions/2/answers
 
 ###
 
+# In the version with authentication, the only arguments are
+# - the 'text', in the POST body
+# - the questio ID, in the URL (here: 2)
+# Other arguments are not required, and are computed by the server:
+# - author is already known by the server (in req.user, after successful login) - server should not trust
+#   the client, otherwise user X could post by impersonating user Y
+# - score will be forced to zero. Server should not trust that the client sends a 0, it might cheat by sending 1000
+# - date can easily be computed by the server (and thus we avoid issues when the client time zone is different from the server one)
 POST http://localhost:3001/api/questions/2/answers
 content-type: application/json
 
 {
-  "text": "Last year, it had about 3400 first-timers.",
-  "author": {
-    "email": "luigi.derussis@polito.it",
-    "id": 1
-  },
-  "score": 0,
-  "date": "2026-03-15"
+  "text": "Last year, it had about 3400 first-timers."
 }
 
+# Note: probably, the server should ensure that the user id of the answer is not the same as the user id
+# of the question... if we don't want to allow a user to respond to their own questions
+
+
 ###
+
+# Previous version, before implementing login, where all data was provided directly
+# Do not use... the server should not trust client-provided information
+
+# POST http://localhost:3001/api/questions/2/answers
+# content-type: application/json
+
+# {
+#   "text": "Last year, it had about 3400 first-timers.",
+#   "author": {
+#     "email": "luigi.derussis@polito.it",
+#     "id": 1
+#   },
+#   "score": 0,
+#   "date": "2026-03-15"
+# }
+
+###
+
+# New version, with authentication. 
+# The values for this API are:
+# - what answer should be modified -> in the URL (here: 5)
+# - the modified text -> in the body
+# Other info can be added by the server without trusting the client:
+# - author, from req.user
+# - score, keep the previous one (or, otherwise, reset to zero, depending on the application logic)
+# - date, keep the previous one (or, otherwise, reset to current date, depending whether you want to record
+#   the answer creation date, or the last modification date)
 
 PUT http://localhost:3001/api/answers/5
 content-type: application/json
 
 {
-  "text": "Last year, it had about 340 first-timers.",
-  "author": {
-    "email": "luigi.derussis@polito.it",
-    "id": 1
-  },
-  "score": 0,
-  "date": "2025-03-15"
+  "text": "Last year, it had about 340 first-timers."
 }
+
+# Note: the server should check that req.user is the actual author of this answer
+
+###
+
+# Previous version (without authentication), where the server trusts the client
+
+# PUT http://localhost:3001/api/answers/5
+# content-type: application/json
+
+# {
+#   "text": "Last year, it had about 340 first-timers.",
+#   "author": {
+#     "email": "luigi.derussis@polito.it",
+#     "id": 1
+#   },
+#   "score": 0,
+#   "date": "2025-03-15"
+# }
 
 ###
 
@@ -43,13 +90,18 @@ content-type: application/json
   "vote": "up"
 }
 
+# Note: the server should ensure that req.user is NOT the author of the answer
+
 ###
 
 DELETE http://localhost:3001/api/answers/2
 
+# Note: the server should ensure that req.user IS the author of the answer
 
 
 ###
+
+# Good login
 
 POST http://localhost:3001/api/sessions
 content-type: application/json
@@ -61,6 +113,8 @@ content-type: application/json
 
 ###
 
+# Bad login
+
 POST http://localhost:3001/api/sessions
 content-type: application/json
 
@@ -71,9 +125,13 @@ content-type: application/json
 
 ###
 
+# Logout
+
 DELETE http://localhost:3001/api/sessions/current
 
 
 ###
+
+# Rebuild session
 
 GET http://localhost:3001/api/sessions/current

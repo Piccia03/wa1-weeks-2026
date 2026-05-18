@@ -1,7 +1,7 @@
-async function doLogin( username, password ) {
+async function doLogin(username, password) {
     const response = await fetch('http://localhost:3001/api/sessions', {
         method: 'POST',
-        body: JSON.stringify( {
+        body: JSON.stringify({
             username: username,
             password: password
         }),
@@ -20,7 +20,7 @@ async function doLogin( username, password ) {
 }
 
 async function doLogout() {
-        const response = await fetch('http://localhost:3001/api/sessions/current', {
+    const response = await fetch('http://localhost:3001/api/sessions/current', {
         method: 'DELETE',
         credentials: 'include'
     })
@@ -36,11 +36,11 @@ async function checkSession() {
     const response = await fetch('http://localhost:3001/api/sessions/current', {
         credentials: "include"
     })
-    if(response.ok) {
+    if (response.ok) {
         return await response.json()
     } else {
         return null
     }
 }
 
-export {doLogin, doLogout, checkSession}
+export { doLogin, doLogout, checkSession }
