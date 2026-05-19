@@ -27,7 +27,7 @@ NOTE: If your name is not on the list, please tell the teachers. Be careful in s
 
 For every new exam, you must “accept the assignment” to get a copy of the skeleton repository.
 
-  1. Accept the proposed assignment using the link specific to the exam or (simulation)[https://classroom.github.com/a/BUWnRq59].
+  1. Accept the proposed assignment using the link specific to the exam or (simulation)[https://classroom.github.com/a/h1y2UQIz].
   2. Classroom will create a new private repository and will fork a copy of the skeleton.
   3. After creation, you get a link to the repository in which YOU must work. The link contains a common part (the exam info), concatenated with your GitHub username.
   4. Now you have your repository and may freely work on it. The repository is private, and only you and the teachers may access it.
